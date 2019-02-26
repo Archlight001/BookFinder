@@ -1,0 +1,30 @@
+img {
+    width: 10%;
+    height: 2%;
+}
+.searchresults{
+    margin-top: 3%;
+    display: flex;
+}
+
+h3,p,.subinfo{
+    width:80%;
+    margin-left: 2%;
+    margin-right: 5%;
+    margin-top: 0 ;
+    margin-bottom: 0;
+}
+.subinfo{
+    display: flex;
+    flex-direction: column;   
+}
+
+#size0 {
+    font-size: 200%;
+}
+#size1 {
+    font-size: 100%;
+}
+#size2, #size3 {
+    font-size: 80%;
+}

@@ -9,14 +9,12 @@ app.set("view engine", "ejs");
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-let bookAuthors = [];
-let bookTitle = [];
-let bookDescription =[];
-let bookPubCompany = [];
-let bookImageURL = [];
+let bookData = [];
 
 app.get("/", function(req,res){
-    res.render("index");
+    res.render("index", {
+        Set : "Unset"
+    });
 });
 
 
@@ -37,41 +35,58 @@ app.post("/", function(req,res){
     };
 
     request(options, function(err,response,result){
-        res.send(result);
+        //res.send(result);
         let bookResult = JSON.parse(result);
         let totalBooks = Object.keys(bookResult.items).length;
     
         for(x=0;x<totalBooks;x++){
+            let bookTitle="";
+            let bookDescription ="";
+            let bookAuthor ="";
+            let bookPublisher ="";
+            let bookImageURL = "";
             if (typeof bookResult.items[x].volumeInfo.title === "undefined"){
-                bookTitle.push("No Title");     
+                bookTitle ="No Title";     
             }else{
-             bookTitle.push(bookResult.items[x].volumeInfo.title);
+             bookTitle =bookResult.items[x].volumeInfo.title;
             }
             if (typeof bookResult.items[x].volumeInfo.description === "undefined") {
-                bookDescription.push("No Description");
+                bookDescription = "No Description";
             } else {
-                bookDescription.push(bookResult.items[x].volumeInfo.description);
+                bookDescription = bookResult.items[x].volumeInfo.description;
             }
              if (typeof bookResult.items[x].volumeInfo.authors === "undefined"){
-                bookAuthors.push("No Author");
+                bookAuthor = "No Author";
             }else{
-                bookAuthors.push(bookResult.items[x].volumeInfo.authors[0]);
+                bookAuthor = bookResult.items[x].volumeInfo.authors[0];
             }
             if (typeof bookResult.items[x].volumeInfo.publisher === "undefined"){
-                bookPubCompany.push("No publisher");
+                bookPublisher = "No publisher";
             }else {
-                 bookPubCompany.push(bookResult.items[x].volumeInfo.publisher);
+                 bookPublisher = bookResult.items[x].volumeInfo.publisher;
             }
             if (typeof bookResult.items[x].volumeInfo.imageLinks === "undefined"){
-                bookImageURL.push("No Image");
+                bookImageURL = "No Image";
             }else {
-                bookImageURL.push(bookResult.items[x].volumeInfo.imageLinks.thumbnail);
+                bookImageURL = bookResult.items[x].volumeInfo.imageLinks.thumbnail;
             }
+
+            let book = {
+                Title : bookTitle,
+                Description: bookDescription,
+                Author : bookAuthor,
+                Publisher: bookPublisher,
+                Image : bookImageURL
+            };
+            bookData.push(book);
             
         }
-        console.log(bookDescription);
+        console.log(bookData);
         
-        
+        res.render("index",{
+            Set : "Set",
+            Book: bookData
+        });
         
     });
 });

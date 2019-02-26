@@ -9,9 +9,30 @@
     <script src="main.js"></script>
 </head>
 <body>
+    <div>
     <form action="/" method="POST">
-        <input type="text" placeholder="Enter name of book here" name="bookName" id="bookName"/>
+        <input type="text" placeholder="Enter name of book here" name="bookName" value="Obanje" id="bookName"/>
         <input type="submit" value="Search">
     </form>
+    </div>
+
+    <% if(Set === "Set"){ %>
+    <%  Book.forEach(function(book){ %>
+    
+        <div class="searchresults">
+        <img src="opening_pic.png" alt="No Image">
+        <div class="subinfo">
+            <h3 id="size0"> <%= book.Title %>  </h3>
+            <p id="size1"><%= book.Description %></p>
+            <p id="size2"><%= book.Author %></p>
+            <p id="size3"><%= book.Publisher %></p>
+        </div>
+    
+    </div>
+    <% }); %>
+    <% } %>
+    
+    
+    
 </body>
 </html>
