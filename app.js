@@ -13,7 +13,9 @@ let bookData = [];
 
 app.get("/", function(req,res){
     res.render("index", {
-        Set : "Unset"
+        Set : "Unset",
+        SearchTitle:"",
+        SearchAuthor:""
     });
 });
 
@@ -22,13 +24,21 @@ app.get("/", function(req,res){
 app.post("/", function(req,res){
     let add = "inauthor: keyes";
     let book = req.body.bookName;
+    let author = req.body.bookAuthor;
+    let qvalue;
+    if(author === ""){
+        qvalue = book + "+intitle:" + book;
+    }else{
+        qvalue = book + "+inauthor:"+author;
+    }
+
     let apikey = "AIzaSyBlMHwsQcbELA3y4gs8ejrcm2RLm1AN9cg";
     //let baseURL = "https://www.googleapis.com/books/v1/volumes?q="+book+"&key="+apikey;
     let options ={
         url: "https://www.googleapis.com/books/v1/volumes",
         method: "GET",
         qs : {
-            q: book,
+            q: qvalue,
             maxResults: 40,
             key: apikey
         }
@@ -38,13 +48,15 @@ app.post("/", function(req,res){
         //res.send(result);
         let bookResult = JSON.parse(result);
         let totalBooks = Object.keys(bookResult.items).length;
-    
+        
+        
         for(x=0;x<totalBooks;x++){
             let bookTitle="";
             let bookDescription ="";
             let bookAuthor ="";
             let bookPublisher ="";
             let bookImageURL = "";
+            let bookMoreInfo ="";
             if (typeof bookResult.items[x].volumeInfo.title === "undefined"){
                 bookTitle ="No Title";     
             }else{
@@ -70,23 +82,32 @@ app.post("/", function(req,res){
             }else {
                 bookImageURL = bookResult.items[x].volumeInfo.imageLinks.thumbnail;
             }
+            if (typeof bookResult.items[x].volumeInfo.infoLink === "undefined") {
+                bookMoreInfo = "";
+            } else {
+                bookMoreInfo = bookResult.items[x].volumeInfo.infoLink;
+            }
 
             let book = {
                 Title : bookTitle,
                 Description: bookDescription,
                 Author : bookAuthor,
                 Publisher: bookPublisher,
-                Image : bookImageURL
+                Image : bookImageURL,
+                InfoLink: bookMoreInfo
             };
             bookData.push(book);
             
         }
-        console.log(bookData);
+       // console.log(bookData);
         
         res.render("index",{
             Set : "Set",
-            Book: bookData
+            Book: bookData,
+            SearchTitle: book,
+            SearchAuthor: author
         });
+        bookData = [];
         
     });
 });
