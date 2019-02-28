@@ -5,17 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Book Finder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
-    <script src="main.js"></script>
 </head>
 <body>
-    <div>
-    <form action="/" method="POST">
-        <input type="text" placeholder="Enter name of book here" name="bookName" value="<%= SearchTitle %>" id="bookName" required/>
-        <input type="text" placeholder="Author" name="bookAuthor" value="<%= SearchAuthor %>" />
-        <input type="submit" value="Search">
+    <h1 class="title">BOOK FINDER </h1>
+    
+    <form action="/" method="POST" class="formdecor form-group">
+        <input type="text" placeholder="Enter name of book here" name="bookName" class="form-control" value="<%= SearchTitle %>" id="bookName" required/>
+        <input type="text" placeholder="Author(Optional)" name="bookAuthor" id="bookAuthor" class="form-control" value="<%= SearchAuthor %>" />
+        <button type="submit" class="btn btn-primary">Search</button>
     </form>
-    </div>
+    
 
     <% if(Set === "Set"){ %>
     <%  Book.forEach(function(book){ %>
@@ -24,7 +25,7 @@
         <img src="<%= book.Image %>" alt="No Image">
         <div class="subinfo">
             <h3 id="size0"><a href="<%= book.InfoLink %>"> <%= book.Title %></a></h3> 
-            <p id="size1"><%= book.Description %></p>
+            <p id="size1"><%= book.Description.substring(0,150) + "... " %></p>
             <p id="size2"><%= book.Author %></p>
             <p id="size3"><%= book.Publisher %></p>
         </div>
@@ -32,6 +33,14 @@
     </div>
     <% }); %>
     <% } %>
+    
+
+   <% if(Set === "NoResult"){ %>
+    <div class="searchresults">
+        <h3><%= ErrorMessage %></h3>
+    </div>
+
+    <%}%>
     
     
     

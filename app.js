@@ -45,11 +45,19 @@ app.post("/", function(req,res){
     };
 
     request(options, function(err,response,result){
-        //res.send(result);
+        //console.log(result);
         let bookResult = JSON.parse(result);
-        let totalBooks = Object.keys(bookResult.items).length;
-        
-        
+        if(bookResult.totalItems === 0){
+            let message = "No result was found for " + book;
+            res.render("index", {
+                Set: "NoResult",
+                ErrorMessage: message,
+                SearchTitle: "",
+                SearchAuthor: ""
+            });
+            bookData = [];
+        }else {
+       let totalBooks = Object.keys(bookResult.items).length;
         for(x=0;x<totalBooks;x++){
             let bookTitle="";
             let bookDescription ="";
@@ -108,7 +116,7 @@ app.post("/", function(req,res){
             SearchAuthor: author
         });
         bookData = [];
-        
+    }  
     });
 });
 
